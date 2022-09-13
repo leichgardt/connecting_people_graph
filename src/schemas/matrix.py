@@ -21,7 +21,7 @@ class NodeConnections:
         self.connections[key] = value
         self._min = min(self._min, value) if value > 0 else self._min
         self._max = max(self._max, value)
-        self._avg = sum(con for con in self.connections.values()) / len(self.connections)
+        self._avg = sum(con for con in self.connections.values() if con > 0) / len(self.connections)
 
     def __getitem__(self, item):
         return self.connections.get(item)
@@ -33,17 +33,17 @@ class NodeConnections:
         return f'NodeConnections({self.connections})'
 
     @property
-    def min(self):
+    def min(self) -> int:
         """Минимальный вес ребер."""
         return self._min
 
     @property
-    def max(self):
+    def max(self) -> int:
         """Максимальный вес ребер."""
         return self._max
 
     @property
-    def avg(self):
+    def avg(self) -> float:
         """Среднее значение веса ребер."""
         return self._avg
 

@@ -20,7 +20,7 @@ communicator = SocialCommunicator(storage)
 @app.on_event("startup")
 def startup():
     """Создать стартовый граф коммуникаций при запуске приложения"""
-    pairs = ((1, 2), (2, 3), (2, 4), (2, 5), (3, 4), (4, 5), (5, 1), (5, 6), (6, 5), (1, 5))
+    pairs = ((1, 2), (2, 3), (2, 4), (2, 3), (3, 4), (4, 5), (4, 1), (1, 3))
     journal = Journal(communications=[PeopleCommunication(person_1_id=i, person_2_id=j) for i, j in pairs])
     add_journal_communications(journal)
 
@@ -32,13 +32,13 @@ def add_journal_communications(journal: Journal):
 
 
 @app.post("/new_communication_journal")
-def add_new_communication(journal: Journal, background_task: BackgroundTasks, status_code=202):
+def add_new_communication(journal: Journal, background_task: BackgroundTasks):
     """Добавить новые коммуникации из json-журнала в коммуникатор, который сохранить их в хранилище."""
     background_task.add_task(add_journal_communications, journal)
     return {"message": "Journal accepted"}
 
 
-@app.get("/get_graph_data")
+@app.get("/graph")
 def get_graph_data(request: Request):
     """Получить граф в виде матрицы смежности, его метаданные и ссылку на изображение графа"""
     matrix, meta, filepath = communicator.get_social_communication_graph()
