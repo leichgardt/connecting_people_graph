@@ -38,6 +38,7 @@ def add_journal_communications(journal: Journal):
 @app.post("/new_communication_journal")
 def add_new_communication(journal: Journal, background_task: BackgroundTasks):
     """Добавить новые коммуникации из json-журнала в коммуникатор, который сохранить их в хранилище."""
+    # TODO add logging for that endpoint (and for other modules)
     background_task.add_task(add_journal_communications, journal)
     return {"message": "Journal accepted"}
 
