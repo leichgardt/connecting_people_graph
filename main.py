@@ -11,6 +11,10 @@ from src.models.journal import Journal
 from src.models.communication import PeopleCommunication
 
 
+root_path = Path(os.path.realpath(__file__)).parent
+if not (path := (root_path / 'static')).exists():
+    path.mkdir()
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 storage = MemoryStorage()
@@ -42,7 +46,6 @@ def add_new_communication(journal: Journal, background_task: BackgroundTasks):
 def get_graph_data(request: Request):
     """Получить граф в виде матрицы смежности, его метаданные и ссылку на изображение графа"""
     matrix, meta, filepath = communicator.get_social_communication_graph()
-    root_path = Path(os.path.realpath(__file__))
-    file_url = urlparse(os.path.relpath(filepath, root_path).replace("\\", "/")[3:]).path
+    file_url = urlparse(os.path.relpath(filepath, root_path).replace("\\", "/")).path
     base_url = "{0.scheme}://{0.netloc}/".format(urlsplit(str(request.url)))
     return {"data": {"matrix": matrix, "meta": meta, "url": base_url + file_url}}
