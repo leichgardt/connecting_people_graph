@@ -1,0 +1,5 @@
+pydantic~=1.10.2
+matplotlib~=3.5.3
+pandas~=1.4.4
+networkx~=2.8.6
+fastapi~=0.83.0
